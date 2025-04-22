@@ -46,6 +46,7 @@ dependencies {
 
     implementation(projects.core.domain)
     implementation(projects.core.data)
+    implementation(projects.feature.recipeslist)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -63,7 +64,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.kotlinx.coroutines.android)
-
+    implementation(libs.androidx.compose.navigation)
+    implementation(libs.androidx.compose.hilt.navigation)
     // Hilt
     implementation(libs.hilt.android.core)
     kapt(libs.hilt.compiler)

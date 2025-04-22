@@ -1,6 +1,7 @@
 package com.coles.entity
 
 data class RecipeItemEntity(
-    val id: String?,
-    val title: String?
+    val id: Int,
+    val title: String?,
+    val url: String?
 )

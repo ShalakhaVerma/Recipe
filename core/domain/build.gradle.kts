@@ -12,6 +12,7 @@ android {
 dependencies {
     implementation(projects.core.domain)
     implementation(projects.model.entity)
+    implementation(projects.model.apiresponse)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
