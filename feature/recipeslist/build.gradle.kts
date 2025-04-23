@@ -1,9 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kapt)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.coles.android.library)
+    alias(libs.plugins.coles.android.hilt)
+    alias(libs.plugins.coles.android.library.compose)
 }
 
 android {
@@ -27,10 +25,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.hilt.navigation)
+    implementation(libs.androidx.compose.constraintlayout)
 
     implementation(libs.hilt.android.core)
-    kapt(libs.hilt.compiler)
     // AndroidX Test - Hilt testing
     androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.compiler)
 }

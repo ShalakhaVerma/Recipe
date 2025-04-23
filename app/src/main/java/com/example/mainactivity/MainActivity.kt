@@ -15,9 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mainactivity.navigation.AppNavigation
-import com.example.mainactivity.ui.theme.ColesApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.navigation.compose.rememberNavController
+import com.coles.designcomponents.theme.ColesApplicationTheme
 
 
 @AndroidEntryPoint
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
-        modifier = modifier
+        modifier = modifier, color = MaterialTheme.colorScheme.primary
     )
 }
 

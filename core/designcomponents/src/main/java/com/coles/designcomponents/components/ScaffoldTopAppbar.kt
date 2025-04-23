@@ -67,7 +67,6 @@ fun ScaffoldTopAppbar(
     snackbarHost: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
-
     ) {
     Scaffold(
         snackbarHost = snackbarHost,

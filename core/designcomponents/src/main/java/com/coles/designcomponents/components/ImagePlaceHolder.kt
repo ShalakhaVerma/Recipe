@@ -25,7 +25,6 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
-import com.coles.designcomponents.theme.color
 
 @Composable
 fun ImagePlaceHolder(modifier: Modifier, imageUrl: String?){
@@ -36,11 +35,11 @@ fun ImagePlaceHolder(modifier: Modifier, imageUrl: String?){
         .build()
     val imageState = rememberAsyncImagePainter(model = model).state
 
-    Box(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max)) {
+    Box(modifier = Modifier.fillMaxWidth()) {
         if (imageState is AsyncImagePainter.State.Loading) {
             CircularProgressIndicator(
-                modifier = Modifier.size(100.dp).align(Alignment.Center),
-                color = MaterialTheme.color.secondaryBackground
+                modifier = Modifier.size(100.dp).align(Alignment.Center)
+//                color = MaterialTheme.color.secondaryBackground
             )
         }
         if (imageState is AsyncImagePainter.State.Success) {
@@ -49,7 +48,7 @@ fun ImagePlaceHolder(modifier: Modifier, imageUrl: String?){
                 contentDescription = "",
                 contentScale = ContentScale.FillWidth,
                 modifier = modifier
-                    .aspectRatio(3f / 2f)
+                    .aspectRatio(1f)
             )
         }
         if (imageState is AsyncImagePainter.State.Error) {

@@ -1,10 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kapt)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.coles.android.application)
+    alias(libs.plugins.coles.android.hilt)
+    alias(libs.plugins.coles.android.application.compose)
 }
 
 android {
@@ -45,6 +42,7 @@ android {
 dependencies {
 
     implementation(projects.core.domain)
+    implementation(projects.core.designcomponents)
     implementation(projects.core.data)
     implementation(projects.feature.recipeslist)
 
@@ -67,11 +65,8 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.hilt.navigation)
     // Hilt
-    implementation(libs.hilt.android.core)
-    kapt(libs.hilt.compiler)
-    // AndroidX Test - Hilt testing
+    implementation(libs.hilt.android.core) // AndroidX Test - Hilt testing
     androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.compiler)
 
     implementation(libs.retrofit2.core)
     implementation(libs.retrofit2.gsonconverter)

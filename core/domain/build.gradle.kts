@@ -1,8 +1,6 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.kapt)
+    alias(libs.plugins.coles.android.library)
+    alias(libs.plugins.coles.android.hilt)
 }
 
 android {
@@ -10,7 +8,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.domain)
     implementation(projects.model.entity)
     implementation(projects.model.apiresponse)
 
@@ -21,6 +18,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.hilt.android.core)
-    kapt(libs.hilt.compiler)
 
 }
