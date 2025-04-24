@@ -1,6 +1,6 @@
 package com.coles.core.domain.utils
 
-import kotlinx.coroutines.flow.Flow
+import android.app.Application
 
 interface UseCase
 
@@ -9,5 +9,5 @@ interface ApiUseCaseParams<Params, Type> : UseCase {
 }
 
 interface ApiUseCaseNonParams<Type> : UseCase {
-    suspend fun execute(): Type
+    suspend fun execute(application: Application): Result<Type>
 }

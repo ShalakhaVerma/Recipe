@@ -1,20 +1,14 @@
 package com.coles.designcomponents.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ImageNotSupported
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +21,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 
 @Composable
-fun ImagePlaceHolder(modifier: Modifier, imageUrl: String?){
+fun ImagePlaceHolder(modifier: Modifier, imageUrl: String?) {
     val model = ImageRequest
         .Builder(LocalContext.current)
         .data(imageUrl)
@@ -38,7 +32,9 @@ fun ImagePlaceHolder(modifier: Modifier, imageUrl: String?){
     Box(modifier = Modifier.fillMaxWidth()) {
         if (imageState is AsyncImagePainter.State.Loading) {
             CircularProgressIndicator(
-                modifier = Modifier.size(100.dp).align(Alignment.Center)
+                modifier = Modifier
+                    .size(100.dp)
+                    .align(Alignment.Center)
 //                color = MaterialTheme.color.secondaryBackground
             )
         }
@@ -52,9 +48,13 @@ fun ImagePlaceHolder(modifier: Modifier, imageUrl: String?){
             )
         }
         if (imageState is AsyncImagePainter.State.Error) {
-            Box(modifier = Modifier.size(230.dp).align(Alignment.Center)) {
+            Box(modifier = Modifier
+                .size(230.dp)
+                .align(Alignment.Center)) {
                 Icon(
-                    modifier = Modifier.size(100.dp).align(Alignment.Center),
+                    modifier = Modifier
+                        .size(100.dp)
+                        .align(Alignment.Center),
                     imageVector = Icons.Rounded.ImageNotSupported,
                     contentDescription = "",
                 )

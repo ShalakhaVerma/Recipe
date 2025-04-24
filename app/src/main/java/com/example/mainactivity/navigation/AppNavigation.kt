@@ -15,14 +15,14 @@ import com.coles.feature.recipes.list.navigation.recipesListScreenRoute
 fun AppNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination:String = recipesListScreenRoute
-){
+    startDestination: String = recipesListScreenRoute
+) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
-        recipesListScreen(onItemClick = navController:: navigateToRecipesListScreen)
+        recipesListScreen(onItemClick = navController::navigateToRecipesListScreen)
     }
 }
 

@@ -41,9 +41,21 @@ fun RecipeColumn(item: RecipeItemEntity) {
             )
 
             Spacer(modifier = Modifier.height(4.dp))
-            item.title?.let { Text(text = it, textAlign = TextAlign.Left, color = MaterialTheme.colorScheme.primary)}
+            item.title?.let {
+                Text(
+                    text = it,
+                    textAlign = TextAlign.Left,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
             Spacer(modifier = Modifier.height(4.dp))
-            item.title?.let { Text(text = it, textAlign = TextAlign.Left, color = MaterialTheme.colorScheme.secondary)}
+            item.title?.let {
+                Text(
+                    text = it,
+                    textAlign = TextAlign.Left,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
         }
     }
 }

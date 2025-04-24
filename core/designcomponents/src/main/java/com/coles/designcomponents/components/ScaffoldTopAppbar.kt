@@ -24,13 +24,13 @@ import androidx.compose.ui.unit.dp
 fun ScaffoldTopAppbar(
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
-    title:String,
-    onNavigationIconClick:()->Unit,
+    title: String,
+    onNavigationIconClick: () -> Unit,
     navigationIcon: Painter = rememberVectorPainter(image = Icons.Outlined.ArrowBack),
     snackbarHost: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
-){
+) {
     Scaffold(
         containerColor = containerColor,
         contentColor = contentColor,
@@ -63,11 +63,11 @@ fun ScaffoldTopAppbar(
 fun ScaffoldTopAppbar(
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
-    title:String,
+    title: String,
     snackbarHost: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
-    ) {
+) {
     Scaffold(
         snackbarHost = snackbarHost,
         containerColor = containerColor,

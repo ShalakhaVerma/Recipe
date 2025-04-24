@@ -1,9 +1,14 @@
 package com.coles.feature.recipes.list
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.coles.core.domain.usecase.ColesRecipesUseCase
 import com.coles.entity.RecipeItemEntity
+import com.coles.feature.recipes.list.RecipesListViewModel.RecipesListUiState.Error
+import com.coles.feature.recipes.list.RecipesListViewModel.RecipesListUiState.HasRecipes
+import com.coles.feature.recipes.list.RecipesListViewModel.RecipesListUiState.ListEmpty
+import com.coles.feature.recipes.list.RecipesListViewModel.RecipesListUiState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,6 +17,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class RecipesListViewModel @Inject constructor(
+    private val application: Application,
     private val recipesListUseCase: ColesRecipesUseCase
 ) : ViewModel() {
 
@@ -25,8 +31,22 @@ class RecipesListViewModel @Inject constructor(
 
     private fun fetchRecipes() {
         viewModelScope.launch {
-            recipesListUseCase.execute().let { response ->
-                _recipesListUiState.value = RecipesListUiState.HasRecipes(response)
+
+            recipesListUseCase.execute(application).let { response ->
+                when (response) {
+                    is com.coles.core.domain.utils.Result.Error -> _recipesListUiState.value =
+                        Error(response.message)
+
+                    is com.coles.core.domain.utils.Result.Loading -> _recipesListUiState.value =
+                        Loading
+
+                    is com.coles.core.domain.utils.Result.Success -> {
+                        if (response.data.isEmpty()) {
+                            _recipesListUiState.value = ListEmpty
+                        }
+                        _recipesListUiState.value = HasRecipes(response.data)
+                    }
+                }
             }
         }
     }

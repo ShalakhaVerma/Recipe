@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.hilt.navigation)
     implementation(libs.androidx.compose.constraintlayout)
+    implementation(libs.gson)
 
     implementation(libs.hilt.android.core)
     // AndroidX Test - Hilt testing

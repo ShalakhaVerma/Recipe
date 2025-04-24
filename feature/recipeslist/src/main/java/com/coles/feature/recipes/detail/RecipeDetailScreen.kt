@@ -47,8 +47,9 @@ internal fun RecipeDetailRoute(
 }
 
 val dummyItem = RecipeItemEntity(
-    1,
+    "1",
     "Photo 1",
+    "desc 1",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
 )
 

@@ -12,23 +12,22 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.coles.designcomponents.components.ScaffoldTopAppbar
-
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.coles.designcomponents.components.ErrorMessageCompose
+import com.coles.designcomponents.components.ScaffoldTopAppbar
 import com.coles.designcomponents.theme.ColesApplicationTheme
 import com.coles.entity.RecipeItemEntity
-import com.coles.feature.recipes.list.RecipesListViewModel
 import com.coles.feature.recipes.list.RecipesListViewModel.RecipesListUiState
 import com.coles.feature.recipes.list.components.RecipeColumn
 
@@ -56,7 +55,12 @@ fun RecipesListScreen(
             containerColor = MaterialTheme.colorScheme.onPrimaryContainer
         ) { contentPadding ->
             when (recipesListUiState) {
-                is RecipesListUiState.Error -> Text(text = "Error")
+                is RecipesListUiState.Error -> {
+                    ErrorMessageCompose(
+                        message = recipesListUiState.message,
+                    )
+                }
+
                 is RecipesListUiState.Loading -> CircularProgressIndicator()
                 is RecipesListUiState.HasRecipes -> RecipeItem(
                     recipesListUiState.list,
@@ -81,6 +85,7 @@ fun RecipeItem(
         Configuration.ORIENTATION_LANDSCAPE -> {
             LandscapeLayout(list, onItemClick, contentPadding)
         }
+
         else -> {
             PortraitLayout(list, onItemClick, contentPadding)
         }
@@ -88,11 +93,15 @@ fun RecipeItem(
 }
 
 @Composable
-fun PortraitLayout( list: List<RecipeItemEntity>,
-                    onItemClick: () -> Unit,
-                    contentPadding: PaddingValues) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = contentPadding) {
+fun PortraitLayout(
+    list: List<RecipeItemEntity>,
+    onItemClick: () -> Unit,
+    contentPadding: PaddingValues
+) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = contentPadding
+    ) {
         items(items = list) { item ->
             RecipeColumn(item = item)
         }
@@ -100,10 +109,12 @@ fun PortraitLayout( list: List<RecipeItemEntity>,
 }
 
 @Composable
-fun LandscapeLayout( list: List<RecipeItemEntity>,
-                     onItemClick: () -> Unit,
-                     contentPadding: PaddingValues) {
-    LazyVerticalGrid  (
+fun LandscapeLayout(
+    list: List<RecipeItemEntity>,
+    onItemClick: () -> Unit,
+    contentPadding: PaddingValues
+) {
+    LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -126,20 +137,24 @@ fun LandscapeLayout( list: List<RecipeItemEntity>,
 fun RecipeItemPreview() {
     val recipeList = listOf(
         RecipeItemEntity(
-            1,
+            "1",
             "Photo 1",
+            "Desc 1",
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
         ),
         RecipeItemEntity(
-            2,
+            "2",
             "Photo 2",
+            "Desc 2",
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
         ),
         RecipeItemEntity(
-            3,
+            "3",
             "Photo 3",
+            "Desc 3",
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
-        ))
+        )
+    )
 
     ScaffoldTopAppbar(
         title = "Recipes",
