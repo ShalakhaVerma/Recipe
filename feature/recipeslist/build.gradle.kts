@@ -6,16 +6,22 @@ plugins {
 
 android {
     namespace = "com.coles.feature.recipeslist"
+
+    defaultConfig {
+        minSdk = 24
+    }
 }
 
 dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.designcomponents)
+    implementation(projects.core.testing)
     implementation(projects.model.entity)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
+    testImplementation(libs.test.mockito)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)

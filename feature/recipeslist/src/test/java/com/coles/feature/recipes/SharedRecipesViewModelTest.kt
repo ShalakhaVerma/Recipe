@@ -5,7 +5,7 @@ import com.coles.core.domain.usecase.ColesRecipesUseCase
 import com.coles.core.domain.utils.Result
 import com.coles.entity.RecipeItemEntity
 import com.coles.feature.recipes.SharedRecipesViewModel.RecipesListUiState
-import com.coles.testing.MainDispatcherRule
+import com.coles.testing.utils.MainDispatcherRule
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest

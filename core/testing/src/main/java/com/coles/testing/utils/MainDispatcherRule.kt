@@ -1,4 +1,4 @@
-package com.coles.core.domain.utils
+package com.coles.testing.utils
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestDispatcher
