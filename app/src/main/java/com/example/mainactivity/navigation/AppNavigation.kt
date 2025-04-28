@@ -7,6 +7,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.coles.feature.recipes.detail.navigation.navigateToRecipesDetailScreen
+import com.coles.feature.recipes.detail.navigation.recipeDetailScreen
 import com.coles.feature.recipes.list.navigation.navigateToRecipesListScreen
 import com.coles.feature.recipes.list.navigation.recipesListScreen
 import com.coles.feature.recipes.list.navigation.recipesListScreenRoute
@@ -22,7 +24,9 @@ fun AppNavigation(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        recipesListScreen(onItemClick = navController::navigateToRecipesListScreen)
+        recipesListScreen(onItemClick = navController::navigateToRecipesDetailScreen)
+        recipeDetailScreen(navController, onBackBtnClick = navController::popBackStackOrIgnore)
+
     }
 }
 

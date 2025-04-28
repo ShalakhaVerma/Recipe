@@ -1,14 +1,11 @@
-package com.coles.feature.recipes.list
+package com.coles.feature.recipes
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.coles.core.domain.usecase.ColesRecipesUseCase
+import com.coles.core.domain.utils.Result
 import com.coles.entity.RecipeItemEntity
-import com.coles.feature.recipes.list.RecipesListViewModel.RecipesListUiState.Error
-import com.coles.feature.recipes.list.RecipesListViewModel.RecipesListUiState.HasRecipes
-import com.coles.feature.recipes.list.RecipesListViewModel.RecipesListUiState.ListEmpty
-import com.coles.feature.recipes.list.RecipesListViewModel.RecipesListUiState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class RecipesListViewModel @Inject constructor(
+class SharedRecipesViewModel @Inject constructor(
     private val application: Application,
     private val recipesListUseCase: ColesRecipesUseCase
 ) : ViewModel() {
@@ -25,26 +22,31 @@ class RecipesListViewModel @Inject constructor(
         MutableStateFlow<RecipesListUiState>(RecipesListUiState.Loading)
     val recipesListUiState get() = _recipesListUiState.asStateFlow()
 
+    private val _selectedRecipeUiState =
+        MutableStateFlow<SelectedRecipeUiState>(SelectedRecipeUiState.Loading)
+    val selectedRecipeUiState get() = _selectedRecipeUiState.asStateFlow()
+
+
     init {
         fetchRecipes()
     }
 
     private fun fetchRecipes() {
         viewModelScope.launch {
-
-            recipesListUseCase.execute(application).let { response ->
+            recipesListUseCase.execute(application).collect { response ->
                 when (response) {
-                    is com.coles.core.domain.utils.Result.Error -> _recipesListUiState.value =
-                        Error(response.message)
+                    is Result.Error -> _recipesListUiState.value =
+                        RecipesListUiState.Error(response.message)
 
-                    is com.coles.core.domain.utils.Result.Loading -> _recipesListUiState.value =
-                        Loading
+                    is Result.Loading -> _recipesListUiState.value =
+                        RecipesListUiState.Loading
 
-                    is com.coles.core.domain.utils.Result.Success -> {
+                    is Result.Success -> {
                         if (response.data.isEmpty()) {
-                            _recipesListUiState.value = ListEmpty
+                            _recipesListUiState.value = RecipesListUiState.ListEmpty
+                            return@collect
                         }
-                        _recipesListUiState.value = HasRecipes(response.data)
+                        _recipesListUiState.value = RecipesListUiState.HasRecipes(response.data)
                     }
                 }
             }
@@ -56,5 +58,14 @@ class RecipesListViewModel @Inject constructor(
         data class HasRecipes(val list: List<RecipeItemEntity>) : RecipesListUiState
         data object ListEmpty : RecipesListUiState
         data class Error(val message: String) : RecipesListUiState
+    }
+
+    fun setSelectedItem(item: RecipeItemEntity) {
+        _selectedRecipeUiState.value = SelectedRecipeUiState.HasRecipe(item)
+    }
+
+    sealed interface SelectedRecipeUiState {
+        data object Loading : SelectedRecipeUiState
+        data class HasRecipe(val item: RecipeItemEntity) : SelectedRecipeUiState
     }
 }

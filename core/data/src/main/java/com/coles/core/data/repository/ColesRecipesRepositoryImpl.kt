@@ -9,6 +9,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -17,8 +20,9 @@ class ColesRecipesRepositoryImpl @Inject constructor() : ColesRecipesRepository 
     override suspend fun getDataFromJson(
         context: Context,
         fileName: String
-    ): Result<List<RecipeItemEntity>> = withContext(Dispatchers.IO) {
-        try {
+    ): Flow<Result<List<RecipeItemEntity>>> = withContext(Dispatchers.IO) {
+        flow {
+            emit(Result.Loading)
 
             val file = context.assets.open("$fileName")
 
@@ -42,9 +46,10 @@ class ColesRecipesRepositoryImpl @Inject constructor() : ColesRecipesRepository 
                     url = item.url
                 )
             }
-            Result.Success(recipes)
-        } catch (e: Exception) {
-            Result.Error(e.message.toString(), 2)
+            emit( Result.Success(recipes))
+        } .catch { error ->
+            //add custom error messages here
+            emit(Result.Error(error.message.toString(), 2))
         }
     }
 }

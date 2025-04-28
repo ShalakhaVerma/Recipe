@@ -2,9 +2,14 @@ package com.coles.feature.recipes.list
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -12,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,23 +25,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.coles.designcomponents.components.ErrorMessageCompose
+import com.coles.designcomponents.components.ImagePlaceHolder
 import com.coles.designcomponents.components.ScaffoldTopAppbar
 import com.coles.designcomponents.theme.ColesApplicationTheme
 import com.coles.entity.RecipeItemEntity
-import com.coles.feature.recipes.list.RecipesListViewModel.RecipesListUiState
-import com.coles.feature.recipes.list.components.RecipeColumn
+import com.coles.feature.recipes.SharedRecipesViewModel
+import com.coles.feature.recipes.SharedRecipesViewModel.RecipesListUiState
+
+private lateinit var recipesListViewModel: SharedRecipesViewModel
 
 @Composable
 internal fun RecipesListRoute(
-    viewModel: RecipesListViewModel = hiltViewModel(),
+    viewModel: SharedRecipesViewModel,
     onItemClick: () -> Unit
 ) {
+    recipesListViewModel = viewModel
     val recipesListUiState by viewModel.recipesListUiState.collectAsStateWithLifecycle()
 
     RecipesListScreen(
@@ -49,7 +61,7 @@ fun RecipesListScreen(
     recipesListUiState: RecipesListUiState,
     onItemClick: () -> Unit
 ) {
-    ColesApplicationTheme(darkTheme = false,dynamicColor = false ) {
+    ColesApplicationTheme(darkTheme = false, dynamicColor = false) {
         ScaffoldTopAppbar(
             title = "Recipes",
             containerColor = MaterialTheme.colorScheme.primaryContainer
@@ -98,13 +110,13 @@ fun PortraitLayout(
     onItemClick: () -> Unit,
     contentPadding: PaddingValues
 ) {
-        LazyColumn(
-            contentPadding = contentPadding
-        ) {
-            items(items = list) { item ->
-                RecipeColumn(item = item)
-            }
+    LazyColumn(
+        contentPadding = contentPadding
+    ) {
+        items(items = list) { item ->
+            RecipeColumn(item = item, onItemClick = onItemClick)
         }
+    }
 }
 
 @Composable
@@ -122,36 +134,61 @@ fun LandscapeLayout(
     ) {
         items(items = list, key = { it.id }) { item ->
 
-            RecipeColumn(item = item)
+            RecipeColumn(item = item, onItemClick)
         }
     }
 }
 
+@Composable
+fun RecipeColumn(item: RecipeItemEntity, onItemClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .clickable {
+                recipesListViewModel.setSelectedItem(item)
+                onItemClick()
+            }
+            .fillMaxWidth(),
+        shape = RectangleShape
+    ) {
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp),
+        ) {
+            ImagePlaceHolder(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)  // Ensure consistent aspect ratio
+                ,
+                item.url
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+            item.title?.let {
+                Text(
+                    text = it,
+                    textAlign = TextAlign.Left,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            item.desc?.let {
+                Text(
+                    text = it,
+                    textAlign = TextAlign.Left,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
+        }
+    }
+}
 
 @Preview
 @Composable
 fun RecipeItemPreview() {
-    val recipeList = listOf(
-        RecipeItemEntity(
-            "1",
-            "Photo 1",
-            "Desc 1 kmlkska",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
-        ),
-        RecipeItemEntity(
-            "2",
-            "Photo 2",
-            "Desc 2 dadkdm",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
-        ),
-        RecipeItemEntity(
-            "3",
-            "Photo 3",
-            "Desc 3 ndndjkqnwd ndndsna",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
-        )
-    )
-
     ScaffoldTopAppbar(
         title = "Recipes",
         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -163,4 +200,24 @@ fun RecipeItemPreview() {
         )
     }
 }
+val recipeList: List<RecipeItemEntity> = listOf(
+    RecipeItemEntity(
+        "1",
+        "Photo 1",
+        "Desc 1 kmlkska",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
+    ),
+    RecipeItemEntity(
+        "2",
+        "Photo 2",
+        "Desc 2 dadkdm",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
+    ),
+    RecipeItemEntity(
+        "3",
+        "Photo 3",
+        "Desc 3 ndndjkqnwd ndndsna",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
+    )
+)
 
