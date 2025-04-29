@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -27,6 +29,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,9 +43,13 @@ import com.coles.designcomponents.components.ErrorMessageCompose
 import com.coles.designcomponents.components.ImagePlaceHolder
 import com.coles.designcomponents.components.ScaffoldTopAppbar
 import com.coles.designcomponents.theme.ColesApplicationTheme
+import com.coles.entity.Details
+import com.coles.entity.Ingredients
 import com.coles.entity.RecipeItemEntity
 import com.coles.feature.recipes.SharedRecipesViewModel
 import com.coles.feature.recipes.SharedRecipesViewModel.RecipesListUiState
+import com.coles.feature.recipeslist.R
+import kotlin.TODO
 
 private lateinit var recipesListViewModel: SharedRecipesViewModel
 
@@ -132,7 +143,7 @@ fun LandscapeLayout(
             .fillMaxSize()  // Adjust height for better scroll experience
             .background(Color.White, RoundedCornerShape(12.dp))
     ) {
-        items(items = list, key = { it.id }) { item ->
+        items(list) { item ->
 
             RecipeColumn(item = item, onItemClick)
         }
@@ -141,8 +152,10 @@ fun LandscapeLayout(
 
 @Composable
 fun RecipeColumn(item: RecipeItemEntity, onItemClick: () -> Unit) {
+    val readRecipeLabel = stringResource(id = R.string.card_click_label)
     Card(
         modifier = Modifier
+            .semantics{onClick(label = readRecipeLabel, action = null)}
             .clickable {
                 recipesListViewModel.setSelectedItem(item)
                 onItemClick()
@@ -157,8 +170,6 @@ fun RecipeColumn(item: RecipeItemEntity, onItemClick: () -> Unit) {
         ) {
             ImagePlaceHolder(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)  // Ensure consistent aspect ratio
                 ,
                 item.url
             )
@@ -169,7 +180,8 @@ fun RecipeColumn(item: RecipeItemEntity, onItemClick: () -> Unit) {
                     text = it,
                     textAlign = TextAlign.Left,
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.semantics { contentDescription = it }
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
@@ -179,7 +191,8 @@ fun RecipeColumn(item: RecipeItemEntity, onItemClick: () -> Unit) {
                     textAlign = TextAlign.Left,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.tertiary
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.semantics { contentDescription = it }
                 )
             }
         }
@@ -202,22 +215,29 @@ fun RecipeItemPreview() {
 }
 val recipeList: List<RecipeItemEntity> = listOf(
     RecipeItemEntity(
-        "1",
-        "Photo 1",
-        "Desc 1 kmlkska",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
-    ),
+        title = "Photo 1",
+        desc = "Desc 1 kmlkska",
+        url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU",
+        amountDetails = Details("Serve", "1"),
+        prepDetails = Details("Prep", "15mins"),
+        cookingDetails = Details("Cooking", "8 hr"),
+        ingredients = listOf(Ingredients("teest"))),
     RecipeItemEntity(
-        "2",
-        "Photo 2",
-        "Desc 2 dadkdm",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
-    ),
+        title = "Photo 2",
+        desc = "Desc 2 dadkdm",
+        url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU",
+        amountDetails = Details("Serve", "2"),
+        prepDetails = Details("Prep", "10mins"),
+        cookingDetails = Details("Cooking", "6 hr"),
+        ingredients = listOf(Ingredients("teest"))),
     RecipeItemEntity(
-        "3",
-        "Photo 3",
-        "Desc 3 ndndjkqnwd ndndsna",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
-    )
+        title = "Photo 3",
+        desc = "Desc 3 ndndjkqnwd ndndsna",
+        url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU",
+        amountDetails = Details("Serve", "3"),
+        prepDetails = Details("Prep", "30mins"),
+        cookingDetails = Details("Cooking", "4 hr"),
+        ingredients = listOf(Ingredients("teest"))),
+
 )
 

@@ -21,6 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,14 +35,16 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.coles.designcomponents.components.ImagePlaceHolder
 import com.coles.designcomponents.theme.ColesApplicationTheme
+import com.coles.entity.Details
+import com.coles.entity.Ingredients
 import com.coles.entity.RecipeItemEntity
 import com.coles.feature.recipes.SharedRecipesViewModel
 import com.coles.feature.recipes.SharedRecipesViewModel.SelectedRecipeUiState
+import com.coles.feature.recipeslist.R
 
 @Composable
 internal fun RecipeDetailRoute(
-    viewModel: SharedRecipesViewModel,
-    onBackBtnClick: () -> Unit
+    viewModel: SharedRecipesViewModel, onBackBtnClick: () -> Unit
 ) {
     val selectedRecipeUiState by viewModel.selectedRecipeUiState.collectAsStateWithLifecycle()
 
@@ -52,10 +58,9 @@ fun RecipeDetailScreen(
     selectedRecipeUiState: SelectedRecipeUiState,
 ) {
     ColesApplicationTheme(darkTheme = false) {
-
         when (selectedRecipeUiState) {
             is SelectedRecipeUiState.HasRecipe -> {
-                RecipeDetail2(
+                RecipeDetail(
                     selectedRecipeUiState.item
                 )
 
@@ -67,7 +72,7 @@ fun RecipeDetailScreen(
 }
 
 @Composable
-fun RecipeDetail2(
+fun RecipeDetail(
     item: RecipeItemEntity
 ) {
     Box(
@@ -75,289 +80,155 @@ fun RecipeDetail2(
             .fillMaxSize()
             .background(Color.White)
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
+            .padding(top = 52.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
         Column {
-            item.title?.let {
-                Text(
-                    text = it,
-                    color = Color.Black,
-                    style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-
-                )
+            Sublist1(item)
+            item.ingredients?.let { list ->
+                list.forEach { value ->
+                    value.ingredients?.let {
+                        Text(
+                            text = it,
+                            color = MaterialTheme.colorScheme.secondary,
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+                }
             }
-            Spacer(modifier = Modifier.height(8.dp))
-
-            item.desc?.let {
-                Text(
-                    text = it,
-                    color = MaterialTheme.colorScheme.secondary,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-
-                )
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Surface() {
-
-                ImagePlaceHolder(
-                    modifier = Modifier
-                        .aspectRatio(3f / 2f)  // Ensure consistent aspect ratio
-                    ,
-                    item.url
-                )
-            }
-            Spacer(modifier = Modifier.height(32.dp))
-
-            HorizontalDivider(
-                thickness = 2.dp, modifier = Modifier
-                    .fillMaxWidth()
-            )
-
-
-            ConstraintLayout(modifier = Modifier.padding(top = 16.dp)) {
-
-                val (
-                    divider1, servesLabelContainer, verticalDivider1,
-                    cookingLabelContainer, verticalDivider2, divider2,
-                    prepLabelContainer,
-                    ingredientsLabelText, ingredientsValueText
-                ) = createRefs()
-
-                ServeBox(
-                    "Serve", "8", modifier = Modifier
-                        .wrapContentSize()
-                        .constrainAs(servesLabelContainer) {
-                            start.linkTo(parent.start)
-                            top.linkTo(divider1.bottom, 16.dp)
-                        })
-
-                ServeBox(
-                    "Prep", "15m", modifier = Modifier
-                        .wrapContentSize()
-                        .constrainAs(prepLabelContainer) {
-                            start.linkTo(verticalDivider1.end)
-                            top.linkTo(divider1.bottom, 16.dp)
-                        })
-
-                ServeBox(
-                    "Cooking", "4h30m", modifier = Modifier
-                        .wrapContentSize()
-                        .constrainAs(cookingLabelContainer) {
-                            start.linkTo(verticalDivider2.end)
-                            top.linkTo(divider1.bottom, 16.dp)
-                        })
-
-                createHorizontalChain(
-                    servesLabelContainer,
-                    prepLabelContainer,
-                    cookingLabelContainer, chainStyle = ChainStyle.Spread
-                )
-                HorizontalDivider(
-                    thickness = 2.dp, modifier = Modifier
-                        .fillMaxWidth()
-                        .constrainAs(divider2) {
-                            top.linkTo(servesLabelContainer.bottom, 16.dp)
-                            start.linkTo(parent.start, 16.dp)
-                            centerHorizontallyTo(parent)
-                        })
-
-                Text(
-                    text = "Ingredients",
-                    color = Color.Black,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .constrainAs(ingredientsLabelText) {
-                            top.linkTo(divider2.bottom, 52.dp)
-                            start.linkTo(parent.start)
-                        }
-                )
-
-                Text(
-                    text = "This hdsjn asnkjdsnfkjcdsm bcsdkcbkjds ksdjnckn" +
-                            "This hdsjn asnkjdsnfkjcdsm bcsdkcbkjds ksdjnckn ",
-                    color = MaterialTheme.colorScheme.secondary,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .constrainAs(ingredientsValueText) {
-                            top.linkTo(ingredientsLabelText.bottom, 16.dp)
-                            start.linkTo(parent.start)
-                        }
-                )
-            }
-
         }
+
     }
 }
 
 @Composable
-fun RecipeDetail(
-    item: RecipeItemEntity
-) {
-    Surface(color = Color.White) {
-        ConstraintLayout(
+fun Sublist1(item: RecipeItemEntity) {
+    item.title?.let {
+        Text(
+            text = it,
+            color = Color.Black,
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .semantics { heading() })
+    }
+    Spacer(modifier = Modifier.height(8.dp))
 
-            ) {
-            val (
-                titleText, descText, recipeImage, divider1, servesLabelContainer, verticalDivider1,
-                cookingLabelContainer, verticalDivider2, divider2,
-                prepLabelContainer, recipeImageContainer,
-                ingredientsLabelText, ingredientsValueText
-            ) = createRefs()
+    item.desc?.let {
+        Text(
+            text = it,
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { contentDescription = it })
+    }
 
-            val rightGuideline = createGuidelineFromStart(0.8f)
+    Spacer(modifier = Modifier.height(32.dp))
 
-            item.title?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .constrainAs(titleText) {
-                            top.linkTo(parent.top, 16.dp)
-                            start.linkTo(parent.start, 40.dp)
-                            centerHorizontallyTo(parent)
-                        }
-                )
-            }
+    Surface() {
 
-            item.desc?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .constrainAs(descText) {
-                            top.linkTo(titleText.bottom, 32.dp)
-                            start.linkTo(parent.start, 40.dp)
-                            centerHorizontallyTo(parent)
-                        }
-                )
-            }
+        ImagePlaceHolder(
+            modifier = Modifier.aspectRatio(3f / 2f)  // Ensure consistent aspect ratio
+            , item.url
+        )
+    }
+    Spacer(modifier = Modifier.height(32.dp))
 
-            Surface(
-                modifier = Modifier
-                    .constrainAs(recipeImageContainer) {
-                        start.linkTo(parent.start, 24.dp)
-                        top.linkTo(descText.bottom, 32.dp)
-                        end.linkTo(rightGuideline, 16.dp)
-                        centerHorizontallyTo(parent)
-                    }
-            ) {
-
-                ImagePlaceHolder(
-                    modifier = Modifier
-                        .aspectRatio(3f / 2f)  // Ensure consistent aspect ratio
-                    ,
-                    item.url
-                )
-            }
-
-            HorizontalDivider(
-                thickness = 2.dp, modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(divider1) {
-                        top.linkTo(recipeImageContainer.bottom, 32.dp)
-                        start.linkTo(parent.start, 40.dp)
-                        centerHorizontallyTo(parent)
-                    })
+    HorizontalDivider(
+        thickness = 2.dp, modifier = Modifier.fillMaxWidth()
+    )
 
 
+    ConstraintLayout(modifier = Modifier.padding(top = 16.dp)) {
+
+        val (divider1, servesLabelContainer, verticalDivider1, cookingLabelContainer, verticalDivider2, divider2, prepLabelContainer, ingredientsLabelText, ingredientsValueText) = createRefs()
+
+        val amountNote = item.amountDetails?.note
+        val amountLabel = item.amountDetails?.label
+        if (!amountNote.isNullOrEmpty() && !amountLabel.isNullOrEmpty()) {
             ServeBox(
-                "Serve", "8", modifier = Modifier
+                amountLabel,
+                amountNote,
+                modifier = Modifier
                     .wrapContentSize()
                     .constrainAs(servesLabelContainer) {
                         start.linkTo(parent.start)
                         top.linkTo(divider1.bottom, 16.dp)
                     })
 
+        }
+        val prepNote = item.prepDetails?.note
+        val prepLabel = item.prepDetails?.label
+        if (!prepNote.isNullOrEmpty() && !prepLabel.isNullOrEmpty()) {
             ServeBox(
-                "Prep", "15m", modifier = Modifier
+                prepLabel,
+                prepNote,
+                modifier = Modifier
                     .wrapContentSize()
                     .constrainAs(prepLabelContainer) {
                         start.linkTo(verticalDivider1.end)
                         top.linkTo(divider1.bottom, 16.dp)
                     })
+        }
 
+        val cookingNote = item.cookingDetails?.note
+        val cookingLabel = item.cookingDetails?.label
+        if (!cookingNote.isNullOrEmpty() && !cookingLabel.isNullOrEmpty()) {
             ServeBox(
-                "Cooking", "4h30m", modifier = Modifier
+                cookingLabel,
+                cookingNote,
+                modifier = Modifier
                     .wrapContentSize()
                     .constrainAs(cookingLabelContainer) {
                         start.linkTo(verticalDivider2.end)
                         top.linkTo(divider1.bottom, 16.dp)
                     })
-
-            createHorizontalChain(
-                servesLabelContainer,
-                prepLabelContainer,
-                cookingLabelContainer, chainStyle = ChainStyle.Spread
-            )
-
-            HorizontalDivider(
-                thickness = 2.dp, modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(divider2) {
-                        top.linkTo(servesLabelContainer.bottom, 16.dp)
-                        start.linkTo(parent.start, 16.dp)
-                        centerHorizontallyTo(parent)
-                    })
-
-            Text(
-                text = "Ingredients",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(ingredientsLabelText) {
-                        top.linkTo(divider2.bottom, 52.dp)
-                        start.linkTo(parent.start)
-                    }
-            )
-
-            Text(
-                text = "This hdsjn asnkjdsnfkjcdsm bcsdkcbkjds ksdjnckn" +
-                        "This hdsjn asnkjdsnfkjcdsm bcsdkcbkjds ksdjnckn ",
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(ingredientsValueText) {
-                        top.linkTo(ingredientsLabelText.bottom, 16.dp)
-                        start.linkTo(parent.start)
-                    }
-            )
-
         }
+
+        createHorizontalChain(
+            servesLabelContainer,
+            prepLabelContainer,
+            cookingLabelContainer,
+            chainStyle = ChainStyle.Spread
+        )
+        HorizontalDivider(
+            thickness = 2.dp, modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(divider2) {
+                    top.linkTo(servesLabelContainer.bottom, 16.dp)
+                    start.linkTo(parent.start, 16.dp)
+                    centerHorizontallyTo(parent)
+                })
+
+        val ingredientsContentDesc = stringResource(R.string.ingredientsContDesc)
+        Text(
+            text = stringResource(R.string.ingredients),
+            color = Color.Black,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    bottom = 8.dp
+                )
+                .constrainAs(ingredientsLabelText) {
+                    top.linkTo(divider2.bottom, 52.dp)
+                    start.linkTo(parent.start)
+                }
+                .semantics { contentDescription = ingredientsContentDesc })
     }
-
-
 }
 
 @Composable
 fun ServeBox(label: String, value: String, modifier: Modifier) {
-    ConstraintLayout(modifier)
-    {
+    ConstraintLayout(modifier.semantics(mergeDescendants = true) {}) {
+
         val (serveLText, serveVText) = createRefs()
         Text(
             text = label,
@@ -368,8 +239,7 @@ fun ServeBox(label: String, value: String, modifier: Modifier) {
                     start.linkTo(parent.start, 16.dp)
                     top.linkTo(parent.top, 16.dp)
                     end.linkTo(parent.end, 16.dp)
-                }
-        )
+                })
 
         Text(
             text = value,
@@ -379,23 +249,24 @@ fun ServeBox(label: String, value: String, modifier: Modifier) {
                 start.linkTo(serveLText.start)
                 end.linkTo(serveLText.end)
                 width = Dimension.fillToConstraints
-            }
-        )
+            })
 
         createVerticalChain(serveLText, serveVText, chainStyle = ChainStyle.Packed)
     }
 }
 
-
 @Preview
 @Composable
 fun RecipeDetailPreview() {
     val dummyItem = RecipeItemEntity(
-        "1",
-        "Photo 1",
-        "desc 1",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
+        title = "Photo 1",
+        desc = "desc 1",
+        url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU",
+        amountDetails = Details("Serve", "2"),
+        prepDetails = Details("Prep", "10mins"),
+        cookingDetails = Details("Cooking", "6 hr"),
+        ingredients = listOf(Ingredients("test"))
     )
 
-    RecipeDetail2(dummyItem)
+    RecipeDetail(dummyItem)
 }

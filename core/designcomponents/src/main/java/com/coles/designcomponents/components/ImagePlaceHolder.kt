@@ -4,9 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ImageNotSupported
 import androidx.compose.material3.CircularProgressIndicator
@@ -44,11 +46,11 @@ fun ImagePlaceHolder(modifier: Modifier, imageUrl: String?) {
         if (imageState is AsyncImagePainter.State.Success) {
             Image(
                 painter = imageState.painter,
-                contentDescription = "",
-                contentScale = ContentScale.FillBounds,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = modifier
+                    .fillMaxSize()
                     .background(MaterialTheme.colorScheme.scrim)
-                    .aspectRatio(1f)
             )
         }
         if (imageState is AsyncImagePainter.State.Error) {
@@ -62,7 +64,7 @@ fun ImagePlaceHolder(modifier: Modifier, imageUrl: String?) {
                         .size(100.dp)
                         .align(Alignment.Center),
                     imageVector = Icons.Rounded.ImageNotSupported,
-                    contentDescription = "",
+                    contentDescription = null,
                 )
             }
         }
