@@ -6,13 +6,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -31,7 +28,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -49,7 +45,6 @@ import com.coles.entity.RecipeItemEntity
 import com.coles.feature.recipes.SharedRecipesViewModel
 import com.coles.feature.recipes.SharedRecipesViewModel.RecipesListUiState
 import com.coles.feature.recipeslist.R
-import kotlin.TODO
 
 private lateinit var recipesListViewModel: SharedRecipesViewModel
 
@@ -213,7 +208,7 @@ fun RecipeItemPreview() {
         )
     }
 }
-val recipeList: List<RecipeItemEntity> = listOf(
+private val recipeList: List<RecipeItemEntity> = listOf(
     RecipeItemEntity(
         title = "Photo 1",
         desc = "Desc 1 kmlkska",

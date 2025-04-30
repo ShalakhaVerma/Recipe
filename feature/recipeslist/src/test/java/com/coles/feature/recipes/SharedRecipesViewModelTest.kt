@@ -6,6 +6,7 @@ import com.coles.core.domain.utils.Result
 import com.coles.entity.RecipeItemEntity
 import com.coles.feature.recipes.SharedRecipesViewModel.RecipesListUiState
 import com.coles.testing.utils.MainDispatcherRule
+import com.coles.testing.utils.data.recipeList
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -37,10 +38,10 @@ class SharedRecipesViewModelTest {
 
     @Test
     fun recipesListUiState_whenSuccess_matchesListFromRepository() = runBlocking {
-        fakeColesRecipesRepository.setItems(Result.Success(testInputItems))
+        fakeColesRecipesRepository.setItems(Result.Success(recipeList))
         recipeUseCase.execute(context)
         val state = viewModel.recipesListUiState.value
-        assertEquals(state, RecipesListUiState.HasRecipes(testInputItems))
+        assertEquals(state, RecipesListUiState.HasRecipes(recipeList))
         assertIsNot<RecipesListUiState.Loading>(state)
     }
 
@@ -52,28 +53,4 @@ class SharedRecipesViewModelTest {
         assertEquals(state, RecipesListUiState.Error("JsonIOException"))
         assertIsNot<RecipesListUiState.Loading>(state)
     }
-
-
-    val testInputItems = listOf(
-        RecipeItemEntity(
-            "1",
-            "Photo 1",
-            "Desc 1 kmlkska",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
-        ),
-        RecipeItemEntity(
-            "2",
-            "Photo 2",
-            "Desc 2 dadkdm",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
-        ),
-        RecipeItemEntity(
-            "3",
-            "Photo 3",
-            "Desc 3 ndndjkqnwd ndndsna",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1jl_IhNcfipvMyNeo3nqLEWtYTi4V8EqmxgijwFXZd0_MPv1m95PZzB9-5K1IoLpARU0&usqp=CAU"
-        )
-    )
-
-
 }

@@ -100,7 +100,6 @@ coles-android-hilt = { id = "coles.android.hilt", version = "unspecified" }
 coles-android-library = { id = "coles.android.library", version = "unspecified" }
 coles-android-library-compose = { id = "coles.android.library.compose", version = "unspecified" }
 coles-android-feature-compose = { id = "coles.android.feature.compose", version = "unspecified" }
-coles-android-retrofit = { id = "coles.android.retrofit", version = "unspecified" }
 coles-jvm-library = { id = "coles.jvm.library", version = "unspecified" }
 android-dynamic-feature = { id = "com.android.dynamic-feature", version.ref = "agp" }
 
