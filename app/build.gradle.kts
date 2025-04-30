@@ -69,10 +69,4 @@ dependencies {
     implementation(libs.hilt.android.core) // AndroidX Test - Hilt testing
     androidTestImplementation(libs.hilt.android.testing)
 
-    implementation(libs.retrofit2.core)
-    implementation(libs.retrofit2.gsonconverter)
-    implementation(libs.okhHttp3.core)
-    implementation(libs.okhHttp3.interceptor)
-
-
 }
